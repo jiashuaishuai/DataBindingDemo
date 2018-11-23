@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.example.shuaijia.databindingdemo.User" />
+
+        <import type="com.example.shuaijia.databindingdemo.Utils" />
+
+        <import type="com.example.shuaijia.databindingdemo.R" />
+
+        <import
+            alias="TestUser"
+            type="com.example.shuaijia.databindingdemo.model.User" />
+
+        <import type="com.example.shuaijia.databindingdemo.model.Goods" />
+
+        <import type="com.example.shuaijia.databindingdemo.model.ObserverGoods" />
+
+        <import type="com.example.shuaijia.databindingdemo.attributes.UserPresenter" />
+
+        <variable
+            name="observerGoods"
+            type="ObserverGoods" />
+
+        <variable
+            name="good"
+            type="Goods" />
+
+        <variable
+            name="UserInfo"
+            type="User" />
+
+        <variable
+            name="TestUserInfo"
+            type="TestUser" />
+
+        <variable
+            name="sex"
+            type="Boolean" />
+
+        <variable
+            name="parents"
+            type="java.util.List&lt;String&gt;" />
+
+        <variable
+            name="map"
+            type="java.util.Map&lt;String,String&gt;" />
+
+        <variable
+            name="data"
+            type="String" />
+
+
+        <variable
+            name="observableList"
+            type="android.databinding.ObservableList&lt;String&gt;" />
+
+        <variable
+            name="observableMap"
+            type="android.databinding.ObservableMap&lt;String,String&gt;" />
+
+        <variable
+            name="binding"
+            type="android.databinding.ObservableField&lt;String&gt;" />
+
+        <variable
+            name="userPresenter"
+            type="UserPresenter" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".MainActivity">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{UserInfo.name,default=defaultname}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(UserInfo.age),default=defaultAge}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{sex?"男":"女",default="男"}' />
+            <!--android:text="@{sex?`男`:`女`,default=`男`}" 第二种方式-->
+            <!--android:text='@{sex?@string/nan:@string/nv,default="男"}'第三种方式-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{parents[0]!=null?parents[0]:"空",default="父亲"}' />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{parents!=null?parents[1]:"空",default="母亲"}' />
+
+            <TextView
+                android:id="@+id/tvSex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{@string/from_user(UserInfo.name,sex?`男`:`女`)}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{tvSex.text}" />
+            <!--引用包含_的控件id是可以直接忽略该符号. 例如tv_name直接写tvName.-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{map[`mapTest`],default=defaultMap}" />
+            <!-- ————————————————————————————include———————————————————————————————————————— -->
+            <include
+                layout="@layout/item_layout"
+                app:userName="@{UserInfo.name}" />
+            <!--也可以穿对象 DataBinding不支持merge标签 -->
+            <!-- ————————————————————————————include End———————————————————————————————————————— -->
+
+
+            <!-- ————————————————————————————自定义事件———————————————————————————————————————— -->
+            <com.example.shuaijia.databindingdemo.view.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:setName="@{UserInfo.name}" />
+            <!--该方法调用时机在onFinishInflate之后onMeasure之前-->
+
+            <com.example.shuaijia.databindingdemo.view.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:myStyle='@{UserInfo.name}' />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:data="@{data}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{Utils.displayPassowrdText(UserInfo.name)}" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="测试显示隐藏"
+                android:visibility='@{UserInfo.name==null}' />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:errorDrawable="@{R.drawable.ic_launcher}"
+                app:imgUrl='@{"这是解析地址"}'
+                app:placeDrawable="@{@drawable/ic_launcher}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@{140}"
+                android:text="测试padding" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background='@{"#D81B60"}'
+                android:text="自定义转换" />
+            <!--com.example.shuaijia.databindingdemo.attributes.Attributes.convertColorToDrawable("#D81B60")-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@{@color/colorAccent}"
+                android:text="自定义转换" />
+            <!--android.databinding.adapters.Converters.convertColorToDrawable(getColorFromResource(mboundView18, R.color.colorAccent))-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:text='@{11.2}'
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="自定义测试"
+                android:background='@{"蓝色"}'
+                android:layout_height="wrap_content" />
+
+            <!-- ————————————————————————————自定义事件End———————————————————————————————————————— -->
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="singleupdate"
+                android:text="更新单个" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{good.name}" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="multipleUpdates"
+                android:text="更新多个" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(good.age)}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{good.sex}" />
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="observableUpdates"
+                android:text="Observable更新" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{observerGoods.name}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(observerGoods.age)}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{observerGoods.sex?"男":"女"}' />
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="observableCollectionUpdate"
+                android:text="更新集合" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{observableList[0]}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{observableMap.mp}' />
+
+            <!--————————————————————————————双向绑定 @={binding}————————————————————————————————-->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={observerGoods.name}" />
+            <!--————————————————————————————双向绑定End @={binding}————————————————————————————————-->
+
+            <!--- ——————————————————————————————————事件绑定——————————————————————————————————-->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(theview)->userPresenter.onUserNameClick(theview,UserInfo)}"
+                android:text="绑定onClick" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{userPresenter::click}"
+                android:text="绑定click" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{userPresenter.click}"
+                android:text="绑定click" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{(theview)->userPresenter.click(theview)}"
+                android:text="绑定click" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{()->userPresenter.click2()}"
+                android:text="@{userPresenter.textStr}" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:afterTextChanged="@{(theview)->userPresenter.afterTextChanged(theview,observerGoods)}" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:afterTextChanged="@{userPresenter::textCHanged1}" />
+            <!--写法和onclick一样 ::  .  ()-->
+
+            <!--- ——————————————————————————————————事件绑定End——————————————————————————————————-->
+        </LinearLayout>
+    </ScrollView>
+</layout>

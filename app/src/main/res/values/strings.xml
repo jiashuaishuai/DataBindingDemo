@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DataBindingDemo</string>
+    <string name="from_user">姓名：%s  性别：%s</string>
+
+</resources>
